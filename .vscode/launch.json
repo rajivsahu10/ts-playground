@@ -9,7 +9,7 @@
             "request": "launch",
             "preLaunchTask": "build-id-this-playground",
             "name": "Launch Program",
-            "program": "${workspaceFolder}\\lib\\myHelloApp.js",
+            "program": "${workspaceFolder}\\lib\\listDirApp.js",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

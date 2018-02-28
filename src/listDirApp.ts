@@ -3,6 +3,7 @@
 import path from "path";
 import fs from "fs";
 import child_process from "child_process";
+import OS from "os";
 
 // git command 
 // git -C d:angular\\angularWorkspace\\my-first-app log --remotes=origin --numstat --pretty=oneline --date=short -2 --format="AuthorName:%aN%nAuthorEmail:%aE%nAuthorDate:%ad%nSubject:%s"
@@ -15,7 +16,15 @@ class LogProcessor {
             throw new Error();            
         }
         console.log(gitLog);
+        console.log("current eol : " + OS.EOL);
+
+        // working regex : /AuthorName(.*\n){4}(([\d|\-]*\t[\d|\-]*\t.*\n)|\n)*/g
+        // let logLine: String[] = gitLog.split("\n");
+        // logLine.forEach(lineEntry => {
+        //     console.log("--> " + lineEntry);
+        // });
         console.log("GitLog : END");
+        
     }
 
     public start() {

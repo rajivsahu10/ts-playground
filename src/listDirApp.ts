@@ -1,7 +1,7 @@
 
 // import * as nodeApi from './node_modules/@types/node/index.d.ts'
 import path from "path";
-import fs from "fs";
+import FS from "fs";
 import child_process from "child_process";
 import OS from "os";
 
@@ -90,7 +90,7 @@ class LogProcessor {
                 let values:string[] = diffStatEntry.split(/\t/g);
                 let locAdded:Number = new Number(values[0]);
                 let locDeleted:Number = new Number(values[1]);
-                let fileName:string = values[2];
+                let fileName:string = values[2].replace(/\//g,".");
                 let filetype:string = fileName.substr(fileName.lastIndexOf(".")+1);
                 let diffStatObject:DiffStats = new DiffStats(locAdded, locDeleted, filetype, fileName);
                 diffStats.push(diffStatObject);
@@ -121,11 +121,16 @@ class LogProcessor {
                 commitsAll.push(commit);
             });    
         }
+        
         console.log(commitsAll);
+        console.log("------- now write JSON --------");
+        //console.log(commitsAllJSON);
+        new OutputFileGenerator(commitsAll).generateFile();
         console.log("GitLog : END");
         
     }
 
+    
     public start() {
         console.log("inside start")
         let gitLogCmd : string = 'git -C d:/angular/angularWorkspace/my-first-app log --remotes=origin --numstat --pretty=oneline --date=short -2 --format="AuthorName:%aN%nAuthorEmail:%aE%nAuthorDate:%ad%nSubject:%s"'
@@ -146,5 +151,14 @@ class LogProcessor {
     }
 }
 
+class OutputFileGenerator {
+    constructor(public commits: Commit[] ) {          
+    }
+
+    public generateFile(): void {
+        let commitsJSON: string = JSON.stringify(this.commits, null, 4);
+        FS.writeFileSync("myLog.json",commitsJSON);
+    }
+}
 const myApp = new LogProcessor();
 myApp.start();
